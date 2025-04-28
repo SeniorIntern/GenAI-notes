@@ -42,7 +42,7 @@ avaiable_tools = {
     }
 }
 
-system_prompt = f"""
+system_prompt = """
     You are an helpfull AI Assistant who is specialized in resolving user query.
     You work on start, plan, action, observe mode.
     For the given user query and available tools, plan the step by step execution, based on the planning,
@@ -76,7 +76,7 @@ system_prompt = f"""
 """
 
 messages = [
-    { "role": "system", "content": system_prompt }
+    {"role": "system", "content": system_prompt }
 ]
 
 
