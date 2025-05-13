@@ -26,31 +26,34 @@ print(len(split_docs))  # 266
 embedd_fn = OpenAIEmbeddings(model="text-embedding-3-large")
 
 # vector store
-vector_store = QdrantVectorStore.from_documents(
-    documents=[],
-    url="http://localhost:6333",
-    collection_name="learning_langchain",
-    embedding=embedd_fn,
-)
+# from_existing_collection
+# vector_store = QdrantVectorStore.from_documents(
+#     documents=[],
+#     url="http://localhost:6333",
+#     collection_name="learning_langchain",
+#     embedding=embedd_fn,
+# )
 
 # save in vector store chunks by chunks
-vector_store.add_documents(documents=split_docs)
+# vector_store.add_documents(documents=split_docs)
 
 print("Injection Complete!")
+print("Chunks of texts are converted to vector embeddings")
 
+# uncomment from here only after injection phase is complete
 retriever = QdrantVectorStore.from_existing_collection(
     url="http://localhost:6333",
     collection_name="learning_langchain",
     embedding=embedd_fn,
 )
 
-relevent_chunks = retriever.similarity_search(query="What is a callback function?")
+relevant_chunks = retriever.similarity_search(query="What is a callback function?")
 
-# print('Relevent Chunks', relevent_chunks)
+# print('Relevent Chunks', relevant_chunks)
 
 client = OpenAI()
 
-SYSTEM_PROMPT = """
+SYSTEM_PROMPT = f"""
 You are an helpful AI Assistant who responds based on the available context.
 
 Context: Based on this given data. answer the user's query. If the answer is not available, then say "Sorry, I can only answer for questions related to NodeJS."
@@ -77,8 +80,6 @@ result = client.chat.completions.create(
     model="gpt-4",
     messages=[
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": "What is a callback function?"},
-        # {"role": "user", "content": "What is difference between LCM and HCF"},
     ],
 )
 
